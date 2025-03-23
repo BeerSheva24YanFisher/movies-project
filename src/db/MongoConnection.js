@@ -20,6 +20,6 @@ class MongoConnection {
     }
 }
 const dbName = DB_NAME;
-const connectionStr = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER_LOW}.dvztv.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=${MONGO_CLUSTER}`;
+const connectionStr = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER_LOW}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 const mongoConnection = new MongoConnection(connectionStr, dbName);
 export default mongoConnection;

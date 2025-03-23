@@ -1,0 +1,7 @@
+{
+    "port": 5000,
+    "db": {
+      "host": "localhost",
+      "name": "sample_mflix"
+    }
+}
