@@ -10,25 +10,25 @@ import favoritesPaths from "../paths/favoritesPaths.js";
 const favoritesRouter = express.Router();
 
 // Добавление в избранное
-favoritesRouter.post("/", validator(schemaAddFavorite, "body"), checkAuthentication(favoritesPaths.POST["/"]), asyncHandler(async (req, res) => {
+favoritesRouter.post("/", validator(schemaAddFavorite, "body"), checkAuthentication(favoritesPaths), asyncHandler(async (req, res) => {
     const favorite = await favoritesService.addFavorite(req.body);
     res.status(201).send(favorite);
 }));
 
 // Получение избранных для пользователя
-favoritesRouter.get("/:email", validator(schemaEmail, "params"), checkAuthentication(favoritesPaths.GET[":email"]), asyncHandler(async (req, res) => {
+favoritesRouter.get("/:email", validator(schemaEmail, "params"), checkAuthentication(favoritesPaths), asyncHandler(async (req, res) => {
     const favorites = await favoritesService.getUserFavorites(req.params.email);
     res.send(favorites);
 }));
 
 // Обновление элемента в избранном
-favoritesRouter.put("/", validator(schemaUpdateFavorite, "body"), checkAuthentication(favoritesPaths.PUT["/"]), asyncHandler(async (req, res) => {
+favoritesRouter.put("/", validator(schemaUpdateFavorite, "body"), checkAuthentication(favoritesPaths), asyncHandler(async (req, res) => {
     const updatedFavorite = await favoritesService.updateFavorite(req.body.favoriteId, req.body);
     res.send(updatedFavorite);
 }));
 
 // Удаление элемента из избранного
-favoritesRouter.delete("/", validator(schemaDeleteFavorite, "body"), checkAuthentication(favoritesPaths.DELETE["/"]), asyncHandler(async (req, res) => {
+favoritesRouter.delete("/", validator(schemaDeleteFavorite, "body"), checkAuthentication(favoritesPaths), asyncHandler(async (req, res) => {
     const deletedFavorite = await favoritesService.deleteFavorite(req.body.favoriteId);
     res.send(deletedFavorite);
 }));

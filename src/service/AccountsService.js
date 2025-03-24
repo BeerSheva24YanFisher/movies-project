@@ -2,7 +2,6 @@ import { createError } from "../errors/errors.js";
 import mongoConnection from "../db/MongoConnection.js";
 import bcrypt from "bcrypt";
 import JwtUtils from "../security/JwtUtils.js";
-import config from "config";
 
 const userRole = "USER";
 const adminRole = "ADMIN";
@@ -29,9 +28,6 @@ class AccountsService {
     }
 
     async #addAccountWithRole(account, role) {
-        if (account.email === process.env.SUPERUSER_NAME) {
-            throw createError(409, `can't create user with e-mail ${account.email}`);
-        }
         const accountToSave = this.#toServiceAccount(account, role);
         try {
             await this.#accounts.insertOne(accountToSave);
@@ -68,7 +64,7 @@ class AccountsService {
         if (bcrypt.compareSync(password, account.hashPassword)) {
             throw createError(400, `the new password should be different from the existing one`);
         }
-        account.hashPassword = bcrypt.hashSync(password, config.get("accounting.salt_rounds"));
+        account.hashPassword = bcrypt.hashSync(password, config.get(10));
         account.expiration = getExpiration();
         
         const resAccount = await this.#accounts.findOneAndUpdate(
@@ -136,7 +132,7 @@ class AccountsService {
 
     async getRequestInformation(email) {
         let { req_start_time, req_count } = await this.getAccount(email);
-        const timeWindow = convertTimeStrToInt(config.get("limitation.user_requests_time"));
+        const timeWindow = convertTimeStrToInt("1m");
         const now = new Date().getTime();
 
         if (req_start_time + timeWindow < now || !req_start_time) {
@@ -154,7 +150,7 @@ class AccountsService {
     }
 
     #toServiceAccount(account, role) {
-        const hashPassword = bcrypt.hashSync(account.password, config.get("accounting.salt_rounds"));
+        const hashPassword = bcrypt.hashSync(account.password, 10);
         const expiration = getExpiration();
         const serviceAccount = { email: account.email, name: account.name, role, hashPassword, expiration };
         return serviceAccount;
@@ -162,19 +158,25 @@ class AccountsService {
 }
 
 function getExpiration() {
-    const expiresIn = convertTimeStrToInt(config.get("accounting.expired_in"));
+    const expiresIn = convertTimeStrToInt("1m");
     return new Date().getTime() + expiresIn;
 }
 
 export function convertTimeStrToInt(expiredInStr) {
+    if (typeof expiredInStr !== 'string') {
+        throw createError(500, `Expected a string for expiration time, but got ${typeof expiredInStr}`);
+    }
+
     const amount = expiredInStr.split(/\D/)[0];
     const parseArray = expiredInStr.split(/\d/);
     const index = parseArray.findIndex(e => !!e.trim());
     const unit = parseArray[index];
     const unitValue = time_units[unit];
-    if (unitValue == undefined) {
+
+    if (unitValue === undefined) {
         throw createError(500, `wrong configuration: unit ${unit} doesn't exist`);
     }
+    
     return amount * unitValue;
 }
 
