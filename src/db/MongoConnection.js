@@ -1,6 +1,8 @@
 import { MongoClient } from "mongodb"
+import dotenv from "dotenv";
+dotenv.config();
 
-const { MONGO_PASSWORD, MONGO_USER, MONGO_CLUSTER, DB_NAME, MONGO_CLUSTER_LOW } = process.env;
+const { MONGO_PASSWORD, MONGO_USER, MONGO_CLUSTER, DB_NAME, MONGO_CLUSTER_LOW} = process.env;
 
 class MongoConnection {
     #client
@@ -20,6 +22,7 @@ class MongoConnection {
     }
 }
 const dbName = DB_NAME;
-const connectionStr = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER_LOW}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+
+const connectionStr = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER_LOW}.fpckx.mongodb.net/test?retryWrites=true&w=majority&appName=${MONGO_CLUSTER}`;
 const mongoConnection = new MongoConnection(connectionStr, dbName);
 export default mongoConnection;

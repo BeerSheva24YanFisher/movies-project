@@ -15,7 +15,8 @@ moviesRouter.get("/movie/:id", validator(schemaId, "params"), checkAuthenticatio
 }));
 
 // Получение списка самых высоко оцененных фильмов
-moviesRouter.get("/mostrated", validator(schemaFilter, "body"), checkAuthentication(moviesPaths.GET["/mostrated"]), expressAsyncHandler(async (req, res) => {
+moviesRouter.get("/mostrated", validator(schemaFilter, "body"), //checkAuthentication(moviesPaths.GET["/mostrated"]), 
+    expressAsyncHandler(async (req, res) => {
     const mostRatedMovies = await moviesService.getMostRated(req.body);
     res.send(mostRatedMovies);
 }));

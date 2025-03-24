@@ -49,9 +49,9 @@ class MoviesService {
             const resMovie = await this.#movies.findOneAndUpdate(
                 { _id: movie._id },
                 { $set: { "imdb.votes": newVotes, "imdb.rating": newRating } },
-                { returnDocument: "after" } // Ensure we get the updated document
+                { returnDocument: "after" }
             );
-            if (resMovie.lastErrorObject.n > 0) {  // Check if the document was actually updated
+            if (resMovie.lastErrorObject.n > 0) {
                 count++;
             }
         }

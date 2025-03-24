@@ -19,7 +19,7 @@ class FavoritesService {
         feed_back = feed_back ?? "";
         const objectToAdd = { email, movie_id: ObjectId.createFromHexString(movie_id), feed_back, viewed };
         const resFavorite = await this.#favorites.insertOne(objectToAdd);
-        if (!resFavorite.acknowledged) {  // Check if insertion is acknowledged
+        if (!resFavorite.acknowledged) {
             throw createError(400, "favorite hasn't been added");
         }
         return objectToAdd;

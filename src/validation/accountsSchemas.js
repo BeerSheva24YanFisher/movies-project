@@ -12,9 +12,9 @@ const password = joiPassword
   .minOfUppercase(1)
   .minOfNumeric(1);
 
-const role = Joi.string().valid("USER", "PREMIUM_USER", "ADMIN").required(); // Обязательная роль
+const role = Joi.string().valid("USER", "PREMIUM_USER", "ADMIN").required();
 
-const name = Joi.string().regex(/^[A-Za-z]+(?: [A-Za-z]+)*$/); // Обновленное регулярное выражение для имени
+const name = Joi.string().regex(/^[A-Za-z]+(?: [A-Za-z]+)*$/);
 
 export const schemaEmail = Joi.object({
   email: email.required(),
@@ -27,7 +27,7 @@ export const schemaEmailPassword = Joi.object({
 
 export const schemaEmailRole = Joi.object({
   email: email.required(),
-  role: role.required(), // Обязательная роль
+  role: role.required(),
 });
 
 export const schemaEmailNamePassword = Joi.object({

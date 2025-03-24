@@ -7,6 +7,9 @@ import favoritesRouter from "./src/routes/favorites.js";
 import { logger, loggerAuth } from "./src/loggers/logger.js";
 import { authenticate } from "./src/middleware/auth.js";
 
+// import dotenv from "dotenv";
+// dotenv.config();
+
 const port = process.env.PORT || 5000;
 
 const app = express();
